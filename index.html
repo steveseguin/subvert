@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subvert - Clean Reading Experience</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --background: #ffffff;
+            --text: #1f2937;
+            --secondary: #6b7280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--background);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tagline {
+            font-size: 1.25rem;
+            color: var(--secondary);
+            margin-bottom: 2rem;
+        }
+
+        .bookmarklet {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: move;
+            margin: 2rem 0;
+        }
+
+        .instructions {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .steps {
+            margin: 2rem 0;
+        }
+
+        .step {
+            margin: 1.5rem 0;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 2rem;
+            height: 2rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 2rem;
+            margin-right: 0.5rem;
+        }
+
+        .demo {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: #f3f4f6;
+            border-radius: 1rem;
+        }
+
+        .demo img {
+            max-width: 100%;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>Subvert</h1>
+            <p class="tagline">Transform any webpage into a clean, distraction-free reading experience</p>
+            
+            <a href="javascript:(function(){ // Store original for restore const originalContent = document.body.innerHTML; function findLargestTextBlock(root) { let bestElement = null; let maxScore = 0; function scoreElement(element) { // Skip hidden elements if (element.offsetWidth === 0 || element.offsetHeight === 0) return 0; // Score based on text length and valuable elements const text = element.innerText || ''; const paragraphs = element.getElementsByTagName('p').length; const images = element.getElementsByTagName('img').length; // Ignore if too small if (text.length < 100) return 0; // Basic scoring let score = text.length; score += paragraphs * 200; // Favor structured content score += images * 50; // Images often indicate content // Penalize likely non-content if(element.id?.toLowerCase().includes('comment')) score *= 0.3; if(element.className?.toLowerCase().includes('nav')) score *= 0.3; if(element.tagName === 'HEADER' || element.tagName === 'FOOTER') score *= 0.3; return score; } function traverse(element) { const score = scoreElement(element); if (score > maxScore) { maxScore = score; bestElement = element; } for(const child of element.children) { traverse(child); } } traverse(root); return bestElement; } // Try common content selectors first const mainContent = document.querySelector('article') || document.querySelector('[role="main"]') || document.querySelector('main') || document.querySelector('.post-content') || document.querySelector('.article-content') || findLargestTextBlock(document.body); if(!mainContent) { alert('Could not find main content!'); return; } // Create clean view with some basic controls document.body.innerHTML = ` <div id="clean-view" style=" max-width: 800px; margin: 40px auto; font-family: system-ui; line-height: 1.6; padding: 20px; color: #333; background: #fff; "> <div style="position:fixed;top:10px;right:10px;display:flex;gap:10px;"> <button onclick="document.body.innerHTML = originalContent" style="padding:5px 10px;cursor:pointer"> Restore </button> <button onclick="document.body.style.background='#111';document.querySelector('#clean-view').style.background='#111';document.querySelector('#clean-view').style.color='#eee'" style="padding:5px 10px;cursor:pointer"> Dark </button> </div> ${mainContent.innerHTML} </div> `;})();" class="bookmarklet">
+                Clean View
+            </a>
+
+            <div class="instructions">
+                <div class="steps">
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        Drag the button above to your bookmarks bar
+                    </div>
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        Visit any article or content-heavy webpage
+                    </div>
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        Click the bookmark to transform the page
+                    </div>
+                </div>
+
+                <div class="demo">
+                    <img src="/api/placeholder/600/300" alt="Demo of clean view transformation">
+                </div>
+
+                <p>
+                    Once activated, Subvert removes ads, navigation, footers, and other distractions. 
+                    You'll get a clean reading experience with just the content you care about.
+                    Use the restore button to return to the original page anytime.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
