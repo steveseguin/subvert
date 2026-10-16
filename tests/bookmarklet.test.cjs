@@ -12,6 +12,7 @@ const bookmarklet = page.match(/href="(javascript:[^"]+)"/)[1].replace(/^javascr
 
 function makeArticle(outerHTML = '<article><p>Article body</p></article>') {
     return {
+        contains(other) { return this === other; },
         cloneNode() {
             return { outerHTML, getElementsByTagName() { return []; } };
         },
@@ -28,7 +29,7 @@ function fixture(original = '<article><p>Original article</p></article><nav>Menu
         body,
         querySelectorAll(selector) {
             if (selector === 'style,link[rel="stylesheet"]') return styles;
-            return selector === 'article' ? (options.articles || [makeArticle()]) : [];
+            return selector.split(',').includes('article') ? (options.articles || [makeArticle()]) : [];
         },
         getElementById(id) {
             assert.match(body.innerHTML, new RegExp('id="' + id + '"'));
