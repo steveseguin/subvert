@@ -59,12 +59,12 @@ test('Restore recovers the exact original page after Clean View', () => {
     assert.equal(f.body.innerHTML, f.original);
 });
 
-test('Restore retains access to original style state', () => {
+test('Restore does not append duplicate stylesheet snapshots', () => {
     const f = fixture(undefined, { withStyles: true });
     f.activate();
     f.restore();
     assert.equal(f.body.innerHTML, f.original);
-    assert.equal(f.styleParent.appended.length, 1);
+    assert.equal(f.styleParent.appended.length, 0);
 });
 
 test('multiple selected articles still restore the original body', () => {
